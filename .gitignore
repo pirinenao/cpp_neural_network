@@ -1,0 +1,5 @@
+*.o
+main
+run.sh
+.vscode
+include/mnist/datasets
