@@ -3,6 +3,8 @@
 #include "../include/mnist/mnist_reader.hpp"
 #include "../include/mnist/mnist_utils.hpp"
 #include "../include/utils.hpp"
+#include "../include/progress_bar.hpp"
+
 using namespace std;
 
 #define NUM_INPUTS 784
@@ -49,13 +51,20 @@ int main(void)
             // backpropagate the output layer
             backpropagate_output(output_layer, layer, (int)dataset.training_labels[sample_index], LEARNING_RATE);
             backpropagate_hidden(layer, output_layer, dataset, sample_index, LEARNING_RATE);
+
+            // display progress (remove for faster training)
+            if (sample_index % 100 == 0)
+                progress_bar(sample_index, dataset.training_images.size(), epoch);
         }
 
         // end timer and display results
         auto end_time = std::chrono::high_resolution_clock::now();
         std::chrono::duration<double, std::milli> elapsed = end_time - start_time;
 
-        cout << "Epoch " << epoch + 1 << " avg. loss: " << loss.average_loss << " time: " << elapsed.count() << "ms\n"
+        cout << endl
+             << "avg.loss: " << loss.average_loss
+             << " learning rate: " << LEARNING_RATE
+             << " time: " << elapsed.count() << " ms\n"
              << endl;
 
         loss = initialize_loss();
