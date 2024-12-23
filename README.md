@@ -12,7 +12,7 @@ The MNIST files are not my property. If used in a paper, you'll need to cite the
 
 This project uses the following third-party components:
 
-- [`mnist_loader.hpp`](https://github.com/baptiste-wicht/mnist-loader) by Baptiste Wicht, licensed under the MIT License. See the license notice in `include/mnist/LICENSE` for details.
+- [`MNIST reader`](https://github.com/wichtounet/mnist) by Baptiste Wicht, licensed under the MIT License. See the license notice in `include/mnist/LICENSE` for details.
 
 ## Licensing Information
 

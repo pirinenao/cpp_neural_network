@@ -38,6 +38,8 @@ $(BUILD_DIR):
 # Clean up build files
 clean:
 	rm -rf $(BUILD_DIR)
+	rm -rf $(TARGET)
+
 
 # Phony targets
 .PHONY: all clean
