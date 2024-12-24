@@ -169,7 +169,7 @@ namespace mnist
      * \param path The path to the label file
      * \param limit The maximum number of elements to read (0: no limit)
      */
-    template <template <typename...> class Container = std::vector, typename Label = float>
+    template <template <typename...> class Container = std::vector, typename Label = int>
     void read_mnist_label_file(Container<Label> &labels, const std::string &path, std::size_t limit = 0)
     {
         auto buffer = read_mnist_file(path, 0x801);
@@ -320,7 +320,7 @@ namespace mnist
      * \param limit The maximum number of elements to read (0: no limit)
      * \return Container filled with the labels
      */
-    template <template <typename...> class Container = std::vector, typename Label = float>
+    template <template <typename...> class Container = std::vector, typename Label = int>
     Container<Label> read_training_labels(const std::string &folder, std::size_t limit)
     {
         Container<Label> labels;
@@ -336,7 +336,7 @@ namespace mnist
      * \param limit The maximum number of elements to read (0: no limit)
      * \return Container filled with the labels
      */
-    template <template <typename...> class Container = std::vector, typename Label = float>
+    template <template <typename...> class Container = std::vector, typename Label = int>
     Container<Label> read_test_labels(const std::string &folder, std::size_t limit)
     {
         Container<Label> labels;
@@ -353,7 +353,7 @@ namespace mnist
      * \param test_limit The maximum number of elements to read from test set (0: no limit)
      * \return The dataset
      */
-    template <template <typename...> class Container, typename Image, typename Label = float>
+    template <template <typename...> class Container, typename Image, typename Label = int>
     MNIST_dataset<Container, Image, Label> read_dataset_3d(const std::string &folder, std::size_t training_limit = 0, std::size_t test_limit = 0)
     {
         MNIST_dataset<Container, Image, Label> dataset;
@@ -378,7 +378,7 @@ namespace mnist
      * \param test_limit The maximum number of elements to read from test set (0: no limit)
      * \return The dataset
      */
-    template <template <typename...> class Container, typename Image, typename Label = float>
+    template <template <typename...> class Container, typename Image, typename Label = int>
     MNIST_dataset<Container, Image, Label> read_dataset_3d(std::size_t training_limit = 0, std::size_t test_limit = 0)
     {
         return read_dataset_3d<Container, Image, Label>("mnist", training_limit, test_limit);
@@ -392,7 +392,7 @@ namespace mnist
      * \param test_limit The maximum number of elements to read from test set (0: no limit)
      * \return The dataset
      */
-    template <template <typename...> class Container, typename Image, typename Label = float>
+    template <template <typename...> class Container, typename Image, typename Label = int>
     MNIST_dataset<Container, Image, Label> read_dataset_direct(const std::string &folder, std::size_t training_limit = 0, std::size_t test_limit = 0)
     {
         MNIST_dataset<Container, Image, Label> dataset;
@@ -417,7 +417,7 @@ namespace mnist
      * \param test_limit The maximum number of elements to read from test set (0: no limit)
      * \return The dataset
      */
-    template <template <typename...> class Container, typename Image, typename Label = float>
+    template <template <typename...> class Container, typename Image, typename Label = int>
     MNIST_dataset<Container, Image, Label> read_dataset_direct(std::size_t training_limit = 0, std::size_t test_limit = 0)
     {
         return read_dataset_direct<Container, Image, Label>("mnist", training_limit, test_limit);
@@ -432,7 +432,7 @@ namespace mnist
      * \param test_limit The maximum number of elements to read from test set (0: no limit)
      * \return The dataset
      */
-    template <template <typename...> class Container = std::vector, template <typename...> class Sub = std::vector, typename Pixel = float, typename Label = float>
+    template <template <typename...> class Container = std::vector, template <typename...> class Sub = std::vector, typename Pixel = float, typename Label = int>
     MNIST_dataset<Container, Sub<Pixel>, Label> read_dataset(std::size_t training_limit = 0, std::size_t test_limit = 0)
     {
         return read_dataset_direct<Container, Sub<Pixel>>(training_limit, test_limit);
@@ -445,7 +445,7 @@ namespace mnist
      * \param test_limit The maximum number of elements to read from test set (0: no limit)
      * \return The dataset
      */
-    template <template <typename...> class Container = std::vector, template <typename...> class Sub = std::vector, typename Pixel = float, typename Label = float>
+    template <template <typename...> class Container = std::vector, template <typename...> class Sub = std::vector, typename Pixel = float, typename Label = int>
     MNIST_dataset<Container, Sub<Pixel>, Label> read_dataset(const std::string &folder, std::size_t training_limit = 0, std::size_t test_limit = 0)
     {
         return read_dataset_direct<Container, Sub<Pixel>>(folder, training_limit, test_limit);

@@ -1,5 +1,5 @@
-#ifndef ANN_UTILS_HPP
-#define ANN_UTILS_HPP
+#ifndef ARCHITECTURE_HPP
+#define ARCHITECTURE_HPP
 #include <cmath>
 #include <random>
 
@@ -11,25 +11,6 @@ struct LAYER
     std::vector<float> outputs;
     std::vector<float> deltas;
 };
-
-struct LOSS
-{
-    float total_loss;
-    float average_loss;
-    float current_loss;
-};
-
-/*
- * initializes loss vectors to zero
- */
-LOSS initialize_loss()
-{
-    LOSS loss;
-    loss.total_loss = 0.0f;
-    loss.average_loss = 0.0f;
-    loss.current_loss = 0.0f;
-    return loss;
-}
 
 /*
  * initialize layer weights and biases
@@ -74,7 +55,7 @@ float relu(float x)
  * computes the weighted sums for the neurons in the layer
  */
 void forward_feed(LAYER *layer,
-                  const mnist::MNIST_dataset<std::vector, std::vector<float>, float> &dataset,
+                  const std::vector<std::vector<float>> &images,
                   int sample_index, int neurons)
 {
     // reset weighted sums for this forward pass
@@ -85,7 +66,7 @@ void forward_feed(LAYER *layer,
         // calculate weighted sum
         for (size_t j = 0; j < layer->weights[i].size(); j++)
         {
-            layer->weighted_sums[i] += (layer->weights[i][j] * dataset.training_images[sample_index][j]);
+            layer->weighted_sums[i] += (layer->weights[i][j] * images[sample_index][j]);
         }
 
         // add bias and apply activation function (ReLU)
@@ -150,23 +131,6 @@ std::vector<float> softmax(LAYER *layer, int num_classes)
 }
 
 /*
- * computes the cross-entropy loss
- * sparse means that the labels are integers not one-hot encoded
- */
-float sparse_cross_entropy_loss(std::vector<float> &softmax_output, int true_label)
-{
-    // get the predicted probability for the true class
-    float predicted_probability = softmax_output[true_label];
-
-    // add a small epsilon to prevent log(0)
-    const float epsilon = 1e-10;
-    predicted_probability = std::max(predicted_probability, epsilon); // Ensure it's not zero
-
-    // compute the negative log of the predicted probability
-    return -std::log(predicted_probability);
-}
-
-/*
  * backpropagate the output layer
  * update the weights and biases based on the error
  */
@@ -207,7 +171,7 @@ void backpropagate_output(LAYER &layer, LAYER &input_layer, int expected_class, 
  * update the weights and biases based on the error
  */
 void backpropagate_hidden(LAYER &layer, LAYER &next_layer,
-                          const mnist::MNIST_dataset<std::vector, std::vector<float>, float> &dataset, int sample_index, float learning_rate)
+                          const mnist::MNIST_dataset<std::vector, std::vector<float>, int> &dataset, int sample_index, float learning_rate)
 {
     std::vector<float> hidden_errors(layer.outputs.size());
     std::vector<float> hidden_deltas(layer.outputs.size());
