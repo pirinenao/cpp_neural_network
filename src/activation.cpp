@@ -1,4 +1,5 @@
 #include "../include/activation.hpp"
+#include <algorithm>
 
 float relu(float x)
 {

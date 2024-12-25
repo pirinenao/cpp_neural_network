@@ -3,6 +3,7 @@
 #include <vector>
 #include <iostream>
 #include <iomanip>
+#include <chrono>
 
 /*
  * Evaluation struct to store evaluation metrics

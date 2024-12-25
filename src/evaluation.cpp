@@ -1,4 +1,5 @@
 #include "../include/evaluation.hpp"
+#include <cmath>
 
 float sparse_cross_entropy_loss(std::vector<float> &softmax_output, int true_label)
 {

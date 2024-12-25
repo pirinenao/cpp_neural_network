@@ -1,10 +1,6 @@
 #ifndef PROGRESS_BAR_HPP
 #define PROGRESS_BAR_HPP
 
-#include <iostream>
-#include <chrono>
-#include <thread>
-
 #define NO_EPOCHS 0
 
 /**

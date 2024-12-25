@@ -1,4 +1,6 @@
 #include "../include/progress_bar.hpp"
+#include <iostream>
+#include <thread>
 
 void progress_bar(int progress, int total, int epoch)
 {
