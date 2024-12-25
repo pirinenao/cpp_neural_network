@@ -28,7 +28,7 @@ void model_train(mnist::MNIST_dataset<std::vector, std::vector<float>, int> data
             output_layer.outputs = softmax(&output_layer, num_classes);
 
             // calculate loss
-            float loss = sparse_cross_entropy_loss(output_layer.outputs, dataset.test_labels[sample_index]);
+            float loss = sparse_cross_entropy_loss(output_layer.outputs, dataset.training_labels[sample_index]);
             eval.set_loss(loss, sample_index);
 
             // backpropagate the output layer

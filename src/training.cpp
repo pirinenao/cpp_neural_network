@@ -51,16 +51,9 @@ void feed_output(LAYER *layer, LAYER *input_layer, int neurons)
  */
 void backpropagate_output(LAYER &layer, LAYER &input_layer, int expected_class, float learning_rate)
 {
-    std::vector<float> output_errors(layer.outputs.size());
     std::vector<float> output_deltas(layer.outputs.size());
 
-    // initialize errors to 0
-    std::fill(output_errors.begin(), output_errors.end(), 0.0f);
-
-    // for softmax + cross-entropy, the error is the difference between predicted and target
-    output_errors[expected_class] = 1.0f - layer.outputs[expected_class];
-
-    // calculate deltas (difference between predicted output and target)
+    // calculate deltas (the gradient propagated back)
     for (size_t i = 0; i < layer.outputs.size(); i++)
     {
         output_deltas[i] = layer.outputs[i] - (i == (size_t)expected_class ? 1.0f : 0.0f);
@@ -88,24 +81,23 @@ void backpropagate_output(LAYER &layer, LAYER &input_layer, int expected_class, 
 void backpropagate_hidden(LAYER &layer, LAYER &next_layer,
                           const mnist::MNIST_dataset<std::vector, std::vector<float>, int> &dataset, int sample_index, float learning_rate)
 {
-    std::vector<float> hidden_errors(layer.outputs.size());
-    std::vector<float> hidden_deltas(layer.outputs.size());
+    std::vector<float> layer_errors(layer.outputs.size());
+    std::vector<float> layer_deltas(layer.outputs.size());
 
     // initialize errors vector to 0
-    std::fill(hidden_errors.begin(), hidden_errors.end(), 0.0f);
+    std::fill(layer_errors.begin(), layer_errors.end(), 0.0f);
 
     // compute error for the hidden layer neurons
     for (size_t i = 0; i < layer.outputs.size(); i++)
     {
-        hidden_errors[i] = 0.0f;
         // sum the errors weighted by the next layer's weights
         for (size_t j = 0; j < next_layer.deltas.size(); j++)
         {
-            hidden_errors[i] += next_layer.deltas[j] * next_layer.weights[j][i];
+            layer_errors[i] += next_layer.deltas[j] * next_layer.weights[j][i];
         }
 
         // calculate the delta for the layer
-        hidden_deltas[i] = hidden_errors[i] * (layer.outputs[i] > 0 ? 1.0f : 0.0f);
+        layer_deltas[i] = layer_errors[i] * (layer.outputs[i] > 0 ? 1.0f : 0.0f);
     }
 
     // update weights and biases for the layer
@@ -114,10 +106,10 @@ void backpropagate_hidden(LAYER &layer, LAYER &next_layer,
         for (size_t j = 0; j < layer.weights[i].size(); j++)
         {
             // update weight based on gradient descent
-            layer.weights[i][j] -= learning_rate * hidden_deltas[i] * dataset.training_images[sample_index][j];
+            layer.weights[i][j] -= learning_rate * layer_deltas[i] * dataset.training_images[sample_index][j];
         }
 
         // update biases (one bias per neuron in the hidden layer)
-        layer.biases[i] -= learning_rate * hidden_deltas[i];
+        layer.biases[i] -= learning_rate * layer_deltas[i];
     }
 }
