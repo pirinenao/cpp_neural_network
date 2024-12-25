@@ -6,7 +6,10 @@
 void model_train(mnist::MNIST_dataset<std::vector, std::vector<float>, int> dataset, LAYER &layer,
                  LAYER &output_layer, EVALUATION eval, int num_epochs, int num_neurons, int num_classes, float learning_rate)
 {
-    std::cout << "Training model on training dataset\n"
+    std::cout << "----------------------------------------"
+              << std::endl;
+    std::cout << "Training model on training dataset\n";
+    std::cout << "----------------------------------------"
               << std::endl;
     std::cout << "Number of samples: " << dataset.training_images.size() << std::endl;
     std::cout << "Number of epochs: " << num_epochs << std::endl;
@@ -15,9 +18,7 @@ void model_train(mnist::MNIST_dataset<std::vector, std::vector<float>, int> data
 
     for (int epoch = 1; epoch <= num_epochs; epoch++)
     {
-        // start timer
-        auto start_time = std::chrono::high_resolution_clock::now();
-
+        eval.start_timer();
         // iterate over the training set
         for (size_t sample_index = 0; sample_index < dataset.training_images.size(); sample_index++)
         {
@@ -29,6 +30,7 @@ void model_train(mnist::MNIST_dataset<std::vector, std::vector<float>, int> data
 
             // calculate loss
             float loss = sparse_cross_entropy_loss(output_layer.outputs, dataset.training_labels[sample_index]);
+
             eval.set_loss(loss, sample_index);
 
             // backpropagate the output layer
@@ -42,14 +44,8 @@ void model_train(mnist::MNIST_dataset<std::vector, std::vector<float>, int> data
             }
         }
 
-        // end timer and display results
-        auto end_time = std::chrono::high_resolution_clock::now();
-        std::chrono::duration<double, std::milli> elapsed = end_time - start_time;
-        std::cout << std::endl
-                  << "avg.loss: " << eval.average_loss
-                  << " time: " << elapsed.count() << " ms\n"
-                  << std::endl;
-
+        eval.end_timer();
+        eval.print_training_metrics();
         eval.initialize_loss();
     }
 }
@@ -58,23 +54,29 @@ void model_train(mnist::MNIST_dataset<std::vector, std::vector<float>, int> data
  * evaluates model by using the validation dataset
  */
 void model_evaluate(mnist::MNIST_dataset<std::vector, std::vector<float>, int> dataset, LAYER &layer,
-                    LAYER &output_layer, EVALUATION eval, int num_neurons, int num_output_neurons)
+                    LAYER &output_layer, EVALUATION eval, int num_neurons, int num_classes)
 {
+    std::cout << "----------------------------------------"
+              << std::endl;
+    std::cout << "Evaluating model on validation dataset\n";
+    std::cout << "----------------------------------------"
+              << std::endl;
+    std::cout << "Number of samples: " << dataset.test_images.size() << std::endl
+              << std::endl;
+
     eval.initialize_loss();
     std::vector<int> predictions;
-
-    std::cout << "Evaluating model on validation dataset\n"
-              << std::endl
-              << "Number of samples: " << dataset.test_images.size() << std::endl
-              << std::endl;
+    eval.start_timer();
 
     for (size_t sample_index = 0; sample_index < dataset.test_images.size(); sample_index++)
     {
+
         forward_feed(&layer, dataset.test_images, sample_index, num_neurons);
-        feed_output(&output_layer, &layer, num_output_neurons);
+
+        feed_output(&output_layer, &layer, num_classes);
 
         // perform softmax
-        output_layer.outputs = softmax(&output_layer, num_output_neurons);
+        output_layer.outputs = softmax(&output_layer, num_classes);
 
         int prediction = max_value_index(output_layer.outputs);
         predictions.push_back(prediction);
@@ -90,8 +92,8 @@ void model_evaluate(mnist::MNIST_dataset<std::vector, std::vector<float>, int> d
         }
     }
 
+    eval.end_timer();
     eval.set_labels(predictions, dataset.test_labels);
-    std::cout << std::endl
-              << "avg.loss: " << eval.average_loss << std::endl
-              << "accuracy: " << eval.accuracy() << std::endl;
+    eval.print_metrics();
+    eval.display_confusion_matrix(num_classes);
 }

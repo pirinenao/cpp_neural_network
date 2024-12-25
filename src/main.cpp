@@ -1,4 +1,3 @@
-#include <iostream>
 #include "../include/mnist/mnist_reader.hpp"
 #include "../include/mnist/mnist_utils.hpp"
 #include "../include/layer.hpp"
@@ -21,9 +20,11 @@ int main(void)
     // normalize the pixel values from 0-255 to 0-1
     mnist::normalize_pixels(dataset);
 
-    // initialize layers and loss
-    LAYER layer = initialize_layer(NUM_INPUTS, NUM_NEURONS);
-    LAYER output_layer = initialize_layer(NUM_NEURONS, NUM_OUTPUT_NEURONS);
+    // initialize layers and evaluation struct
+    LAYER layer;
+    LAYER output_layer;
+    layer.initialize_layer(NUM_INPUTS, NUM_NEURONS);
+    output_layer.initialize_layer(NUM_NEURONS, NUM_OUTPUT_NEURONS);
     EVALUATION eval;
 
     // train the model
