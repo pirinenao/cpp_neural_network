@@ -26,6 +26,7 @@ This project uses the following third-party components:
 
 - [`MNIST dataset reader`](https://github.com/wichtounet/mnist) by Baptiste Wicht, licensed under the MIT License. See the license notice in `include/mnist/LICENSE` for details.
 
+  
 ### Evaluation Methods
 
 The model is evaluated using several metrics that provide a comprehensive view of its behavior during training and testing.
@@ -39,7 +40,7 @@ The model is evaluated using several metrics that provide a comprehensive view o
 - Diagonal elements represent correct predictions (true positives).
 - Off-diagonal elements represent misclassifications (false positives and false negatives).
 
-4. **Class Precision**: Precision helps measure how many of the predicted instances for each class are actually correct. High precision indicates that false positives are minimized.
+4. **Class Precision**: Precision helps to measure how many of the predicted instances for each class are actually correct. High precision indicates that false positives are minimized.
 
 ### Model Evaluation Metrics
 
@@ -62,15 +63,45 @@ In the confusion matrix, true positives dominate, and misclassifications are rar
 
 Class precision remains high across all classes, with values ranging from 0.95 to 0.99, suggesting that the model is reliably predicting the correct labels for each class.
 
-### Optimizations
+### Performance Enhancements
 
-Even though the evaluation metrics are good, further optimizations could enhance the model's performance. Below are some methods I would suggest
+Even though the evaluation metrics are good, further optimizations could enhance the model's performance. Below are some methods I would suggest.
 
 - Use a more advanced optimizer (e.g. Adam)
 - Add a neuron dropout functionality
 - Implement minibatching (splitting training data into smaller batches)
 - Experiment with the network architecture
-- Implementing dynamic learning rate
+- Implement dynamic learning rate
+- Use GPU for the training (e.g. CUDA toolkit for NVIDIA)
+- Parallel computing with multiple CPU cores
+
+### Setup Instructions
+
+To run this software, ensure you have the following dependencies:
+
+- **g++ compiler** with **C++11 support**
+- **make** (for building the project)
+- **Git LFS** (for pulling the MNIST dataset files, as the loader doesn't support compressed format)
+
+Additionally, if you don't want to use Git LFS, you can manually download the dataset from the official [MNIST website](https://yann.lecun.com/exdb/mnist/), uncompress it, and add the files to the `/include/mnist/datasets` directory.
+
+**Clone the repository:**
+```bash
+git clone https://github.com/pirinenao/cpp_neural_network.git
+```
+**Change directory && pull the LFS files:**
+```bash
+cd cpp_neural_network && git lfs pull
+```
+**Run the Makefile:**
+```bash
+make
+```
+**Run the oftware:**
+```bash
+./main
+```
+
 
 ### License
 
