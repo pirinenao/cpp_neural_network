@@ -5,6 +5,13 @@
 //  http://opensource.org/licenses/MIT)
 //=======================================================================
 
+//=======================================================================
+// DISCLAIMER: This file has been modified for use in this project.
+// The following changes were made:
+// 1. 'Label' datatype changed to 'int'.
+// 2. 'Pixel' datatype changed to 'float'.
+//=======================================================================
+
 /*!
  * \file
  * \brief Contains functions to read the MNIST dataset

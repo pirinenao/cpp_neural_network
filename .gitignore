@@ -2,4 +2,4 @@
 main
 run.sh
 .vscode
-include/mnist/datasets
+.gitattributes

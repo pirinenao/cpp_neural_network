@@ -8,7 +8,7 @@ void model_train(mnist::MNIST_dataset<std::vector, std::vector<float>, int> data
 {
     std::cout << "----------------------------------------"
               << std::endl;
-    std::cout << "Training model on training dataset\n";
+    std::cout << "Training model on the training dataset\n";
     std::cout << "----------------------------------------"
               << std::endl;
     std::cout << "Number of samples: " << dataset.training_images.size() << std::endl;
@@ -58,7 +58,7 @@ void model_evaluate(mnist::MNIST_dataset<std::vector, std::vector<float>, int> d
 {
     std::cout << "----------------------------------------"
               << std::endl;
-    std::cout << "Evaluating model on validation dataset\n";
+    std::cout << "Evaluating model on the validation dataset\n";
     std::cout << "----------------------------------------"
               << std::endl;
     std::cout << "Number of samples: " << dataset.test_images.size() << std::endl
@@ -66,7 +66,6 @@ void model_evaluate(mnist::MNIST_dataset<std::vector, std::vector<float>, int> d
 
     eval.initialize_loss();
     std::vector<int> predictions;
-    eval.start_timer();
 
     for (size_t sample_index = 0; sample_index < dataset.test_images.size(); sample_index++)
     {
@@ -92,8 +91,8 @@ void model_evaluate(mnist::MNIST_dataset<std::vector, std::vector<float>, int> d
         }
     }
 
-    eval.end_timer();
     eval.set_labels(predictions, dataset.test_labels);
     eval.print_metrics();
     eval.display_confusion_matrix(num_classes);
+    eval.display_precision(num_classes);
 }

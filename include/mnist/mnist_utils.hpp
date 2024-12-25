@@ -5,6 +5,13 @@
 //  http://opensource.org/licenses/MIT)
 //=======================================================================
 
+//=======================================================================
+// DISCLAIMER: This file has been modified for use in this project.
+// The following changes were made:
+// 1. Removed non-relevant functions.
+// 2. Added 'normalize_pixels' function.
+//=======================================================================
+
 /*!
  * \file
  * \brief Contains utility functions to manipulate the MNIST dataset

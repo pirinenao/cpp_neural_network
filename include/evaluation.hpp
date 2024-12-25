@@ -91,7 +91,8 @@ struct EVALUATION
         }
 
         // print confusion matrix
-        std::cout << "Confusion matrix:\n";
+        std::cout << std::endl
+                  << "Confusion matrix:\n";
         for (size_t i = 0; i < confusion_matrix.size(); ++i)
         {
             std::cout << "[";
@@ -103,6 +104,49 @@ struct EVALUATION
                 std::cout << std::setw(5) << confusion_matrix[i][j];
             }
             std::cout << "]" << std::endl;
+        }
+    }
+
+    /*
+     *  calculate precision for each class
+     */
+    void display_precision(int num_classes)
+    {
+        // ensure confusion matrix is populated
+        if (confusion_matrix.empty())
+        {
+            std::cout << "Error: confusion matrix is empty. Please compute it first.\n";
+            return;
+        }
+
+        std::cout << std::endl
+                  << "Precisions " << std::endl;
+
+        // calculate precision for each class
+        for (int i = 0; i < num_classes; ++i)
+        {
+            int true_positives = confusion_matrix[i][i];
+            int false_positives = 0;
+
+            // sum the column values (false positives for class i)
+            for (int j = 0; j < num_classes; ++j)
+            {
+                if (i != j)
+                {
+                    false_positives += confusion_matrix[j][i];
+                }
+            }
+
+            // precision formula: TP / (TP + FP)
+            double precision = 0.0;
+            if (true_positives + false_positives > 0)
+            {
+                precision = static_cast<double>(true_positives) / (true_positives + false_positives);
+            }
+
+            // print precision for class i with 2 decimal places
+            std::cout << "class " << i << ": "
+                      << std::fixed << std::setprecision(2) << precision << std::endl;
         }
     }
 
@@ -142,8 +186,7 @@ struct EVALUATION
         std::cout << std::endl
                   << std::endl
                   << "avg.loss: " << this->average_loss << std::endl
-                  << "accuracy: " << this->accuracy() * 100 << "%" << std::endl
-                  << "time: " << (int)this->elapsed.count() << " ms\n"
+                  << "accuracy: " << this->accuracy() * 100 << "%"
                   << std::endl;
     }
 };
