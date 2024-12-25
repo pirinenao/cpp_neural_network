@@ -1,55 +1,4 @@
-#ifndef ARCHITECTURE_HPP
-#define ARCHITECTURE_HPP
-#include <cmath>
-#include <random>
-
-struct LAYER
-{
-    std::vector<std::vector<float>> weights;
-    std::vector<float> biases;
-    std::vector<float> weighted_sums;
-    std::vector<float> outputs;
-    std::vector<float> deltas;
-};
-
-/*
- * initialize layer weights and biases
- */
-LAYER initialize_layer(int inputs, int neurons)
-{
-    LAYER layer;
-
-    // use random device and normal distribution
-    std::random_device rd;
-    std::mt19937 gen(rd());
-    std::normal_distribution<float> dist(0.0f, std::sqrt(2.0f / inputs));
-
-    // initialize weights with He initialization
-    layer.weights = std::vector<std::vector<float>>(neurons, std::vector<float>(inputs));
-    for (int i = 0; i < neurons; ++i)
-    {
-        for (int j = 0; j < inputs; ++j)
-        {
-            layer.weights[i][j] = dist(gen);
-        }
-    }
-
-    // initialize vectors with zeros
-    layer.biases = std::vector<float>(neurons, 0.0f);
-    layer.weighted_sums = std::vector<float>(neurons, 0.0f);
-    layer.outputs = std::vector<float>(neurons, 0.0f);
-    layer.deltas = std::vector<float>(neurons, 0.0f);
-
-    return layer;
-}
-
-/*
- * ReLU activation for the hidden layer
- */
-float relu(float x)
-{
-    return fmax(0, x);
-}
+#include "../include/training.hpp"
 
 /*
  * computes the weighted sums for the neurons in the layer
@@ -97,40 +46,6 @@ void feed_output(LAYER *layer, LAYER *input_layer, int neurons)
 }
 
 /*
- * softmax activation for the output layers
- * returns a vector of probabilities which sums to 1
- */
-std::vector<float> softmax(LAYER *layer, int num_classes)
-{
-    // initialize output vector
-    std::vector<float> output(num_classes, 0.0f);
-
-    // find the maximum value in the outputs for numerical stability
-    float max_value = *std::max_element(layer->outputs.begin(), layer->outputs.end());
-
-    // compute exponentiated values and accumulate their sum
-    float sum_exp = 0.0;
-    for (int i = 0; i < num_classes; ++i)
-    {
-        // subtract max for stability
-        float exp_value = std::exp(layer->outputs[i] - max_value);
-        // store the exponentiated value in the output
-        output[i] = exp_value;
-        // accumulate the sum of exponentiated values
-        sum_exp += exp_value;
-    }
-
-    // normalize the exponentiated values (to get probabilities)
-    for (size_t i = 0; i < output.size(); ++i)
-    {
-        // normalize each value by the sum of exponentiated values
-        output[i] /= sum_exp;
-    }
-
-    return output;
-}
-
-/*
  * backpropagate the output layer
  * update the weights and biases based on the error
  */
@@ -152,9 +67,9 @@ void backpropagate_output(LAYER &layer, LAYER &input_layer, int expected_class, 
     }
 
     // update weights and biases for the output layer
-    for (size_t i = 0; i < layer.outputs.size(); i++) // Loop over output neurons
+    for (size_t i = 0; i < layer.outputs.size(); i++)
     {
-        for (size_t j = 0; j < input_layer.outputs.size(); j++) // Loop over input neurons
+        for (size_t j = 0; j < input_layer.outputs.size(); j++)
         {
             // update the weight based on gradient descent
             layer.weights[i][j] -= learning_rate * output_deltas[i] * input_layer.outputs[j];
@@ -206,5 +121,3 @@ void backpropagate_hidden(LAYER &layer, LAYER &next_layer,
         layer.biases[i] -= learning_rate * hidden_deltas[i];
     }
 }
-
-#endif

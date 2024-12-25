@@ -20,7 +20,6 @@ The MNIST files are not my property. If used in a paper, I urge you to cite the 
 
 More information is available on the official [MNIST website](https://yann.lecun.com/exdb/mnist/).
 
-
 ### Third-Party Code
 
 This project uses the following third-party components:
