@@ -101,8 +101,7 @@ cd cpp_neural_network && git lfs pull
 make
 ```
 
-**Run the oftware:**
-
+**Run the Software:**
 ```bash
 ./main
 ```
