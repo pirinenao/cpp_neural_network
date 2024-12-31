@@ -69,9 +69,7 @@ void model_evaluate(mnist::MNIST_dataset<std::vector, std::vector<float>, int> d
 
     for (size_t sample_index = 0; sample_index < dataset.test_images.size(); sample_index++)
     {
-
-        forward_feed(&layer, dataset.test_images, sample_index, num_neurons);
-
+        forward_feed_parallel(&layer, dataset.test_images, sample_index, num_neurons);
         feed_output(&output_layer, &layer, num_classes);
 
         // perform softmax

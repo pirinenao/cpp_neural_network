@@ -16,6 +16,13 @@ void forward_feed(LAYER *layer,
 void feed_output(LAYER *layer, LAYER *input_layer, int neurons);
 
 /*
+ * uses parallel computing to compute the weighted sums for the neurons in the layer
+ */
+void forward_feed_parallel(LAYER *layer,
+                           const std::vector<std::vector<float>> &images,
+                           int sample_index, int neurons);
+
+/*
  * backpropagate the output layer
  * update the weights and biases based on the error
  */

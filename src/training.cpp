@@ -1,6 +1,6 @@
 #include "../include/training.hpp"
-
-#define LRELU_ALPHA 0.01
+#include <thread>
+#include <functional> // for std::ref
 
 /*
  * computes the weighted sums for the neurons in the layer
@@ -20,8 +20,8 @@ void forward_feed(LAYER *layer,
             layer->weighted_sums[i] += (layer->weights[i][j] * images[sample_index][j]);
         }
 
-        // add bias and apply activation function (leaky ReLU)
-        layer->outputs[i] = leaky_relu(layer->weighted_sums[i] + layer->biases[i], LRELU_ALPHA);
+        // add bias and apply activation function (ReLU)
+        layer->outputs[i] = relu(layer->weighted_sums[i] + layer->biases[i]);
     }
 }
 
@@ -44,6 +44,57 @@ void feed_output(LAYER *layer, LAYER *input_layer, int neurons)
         // add bias
         // no activation function needed here for output layer, softmax will be applied outside
         layer->outputs[i] = layer->weighted_sums[i] + layer->biases[i];
+    }
+}
+
+/*
+ * parallel version of forward_feed
+ */
+void forward_feed_parallel(LAYER *layer,
+                           const std::vector<std::vector<float>> &images,
+                           int sample_index, int neurons)
+{
+    // reset weighted sums for this forward pass
+    std::fill(layer->weighted_sums.begin(), layer->weighted_sums.end(), 0.0f);
+
+    // define a lambda function to process a range of neurons
+    auto process_neurons = [&](int start, int end)
+    {
+        for (int i = start; i < end; i++)
+        {
+            // calculate weighted sum
+            for (size_t j = 0; j < layer->weights[i].size(); j++)
+            {
+                layer->weighted_sums[i] += (layer->weights[i][j] * images[sample_index][j]);
+            }
+
+            // add bias and apply activation function (leaky ReLU)
+            layer->outputs[i] = relu(layer->weighted_sums[i] + layer->biases[i]);
+        }
+    };
+
+    // determine the number of threads to use
+    const int num_threads = std::thread::hardware_concurrency();
+    // calculate the chunk size for each thread
+    // adding num_threads - 1 to round up
+    const int chunk_size = (neurons + num_threads - 1) / num_threads;
+
+    // create and launch threads
+    std::vector<std::thread> threads;
+    for (int i = 0; i < num_threads; i++)
+    {
+        int start = i * chunk_size;
+        int end = std::min(start + chunk_size, neurons);
+        if (start < neurons)
+        {
+            threads.emplace_back(process_neurons, start, end);
+        }
+    }
+
+    // join threads
+    for (size_t i = 0; i < threads.size(); i++)
+    {
+        threads[i].join();
     }
 }
 
