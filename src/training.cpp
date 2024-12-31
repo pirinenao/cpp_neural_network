@@ -68,7 +68,7 @@ void forward_feed_parallel(LAYER *layer,
                 layer->weighted_sums[i] += (layer->weights[i][j] * images[sample_index][j]);
             }
 
-            // add bias and apply activation function (leaky ReLU)
+            // add bias and apply activation function (ReLU)
             layer->outputs[i] = relu(layer->weighted_sums[i] + layer->biases[i]);
         }
     };

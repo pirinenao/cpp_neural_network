@@ -11,12 +11,6 @@
 float relu(float x);
 
 /*
- * leaky ReLU activation for the hidden layer
- * sets all negative inputs to alpha * x
- */
-float leaky_relu(float x, double alpha);
-
-/*
  * softmax activation for the output layers
  * returns a vector of probabilities which sums to 1
  */
