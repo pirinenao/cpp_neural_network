@@ -26,7 +26,6 @@ This project uses the following third-party components:
 
 - [`MNIST dataset reader`](https://github.com/wichtounet/mnist) by Baptiste Wicht, licensed under the MIT License. See the license notice in `include/mnist/LICENSE` for details.
 
-  
 ### Evaluation Methods
 
 The model is evaluated using several metrics that provide a comprehensive view of its behavior during training and testing.
@@ -44,20 +43,19 @@ The model is evaluated using several metrics that provide a comprehensive view o
 
 ### Model Evaluation Metrics
 
-The model was trained for 10 epochs (iterations over the entire training dataset), with each epoch taking approximately 81,000 milliseconds. The learning rate was set to 0.001, and the following metrics were obtained:
+The model was trained for 10 epochs (iterations over the entire training dataset), with each epoch taking approximately 63,000 milliseconds (81,000 ms without parallel computing). With learning rate set of 0.001, the following metrics were obtained:
 
 - `avg.loss: 0.100203`
 - `accuracy: 96.93%`
 - `Confusion matrix:`
-  
+
    <img width="492" alt="Screenshot 2024-12-25 at 19 18 48" src="https://github.com/user-attachments/assets/72891254-0e15-4fe6-ae20-d908b104c21d" />
 
-
 - `Class precision:`
-  
+
   <img width="107" alt="Screenshot 2024-12-25 at 19 20 08" src="https://github.com/user-attachments/assets/7446875b-1d61-496c-a19c-ce02623863f9" />
 
-The average loss of `0.100203` and accuracy of `96.93%` indicate that the model is performing well and generalizing effectively to unseen data. 
+The average loss of `0.100203` and accuracy of `96.93%` indicate that the model is performing well and generalizing effectively to unseen data.
 
 In the confusion matrix, true positives dominate, and misclassifications are rare, demonstrating that the model's predictions are generally correct. The most frequent misclassification occurred when the model misclassified images of the number 9 as the number 7.
 
@@ -86,22 +84,28 @@ To run this software, ensure you have the following dependencies:
 Additionally, if you don't want to use Git LFS, you can manually download the dataset from the official [MNIST website](https://yann.lecun.com/exdb/mnist/), uncompress it, and add the files to the `/include/mnist/datasets` directory.
 
 **Clone the repository:**
+
 ```bash
 git clone https://github.com/pirinenao/cpp_neural_network.git
 ```
+
 **Change directory && pull the LFS files:**
+
 ```bash
 cd cpp_neural_network && git lfs pull
 ```
+
 **Run the Makefile:**
+
 ```bash
 make
 ```
+
 **Run the oftware:**
+
 ```bash
 ./main
 ```
-
 
 ### License
 
