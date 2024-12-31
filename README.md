@@ -43,7 +43,7 @@ The model is evaluated using several metrics that provide a comprehensive view o
 
 ### Model Evaluation Metrics
 
-The model was trained for 10 epochs (iterations over the entire training dataset), with each epoch taking approximately 63,000 milliseconds (81,000 ms without parallel computing). With learning rate set of 0.001, the following metrics were obtained:
+The model was trained for 10 epochs (iterations over the entire training dataset), with each epoch taking approximately 63,000 milliseconds (81,000 ms without parallel computing). With learning rate of 0.001, the following metrics were obtained:
 
 - `avg.loss: 0.100203`
 - `accuracy: 96.93%`
