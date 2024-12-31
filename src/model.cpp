@@ -22,7 +22,7 @@ void model_train(mnist::MNIST_dataset<std::vector, std::vector<float>, int> data
         // iterate over the training set
         for (size_t sample_index = 0; sample_index < dataset.training_images.size(); sample_index++)
         {
-            forward_feed(&layer, dataset.training_images, sample_index, num_neurons);
+            forward_feed_parallel(&layer, dataset.training_images, sample_index, num_neurons);
             feed_output(&output_layer, &layer, num_classes);
 
             // perform softmax
@@ -69,9 +69,7 @@ void model_evaluate(mnist::MNIST_dataset<std::vector, std::vector<float>, int> d
 
     for (size_t sample_index = 0; sample_index < dataset.test_images.size(); sample_index++)
     {
-
-        forward_feed(&layer, dataset.test_images, sample_index, num_neurons);
-
+        forward_feed_parallel(&layer, dataset.test_images, sample_index, num_neurons);
         feed_output(&output_layer, &layer, num_classes);
 
         // perform softmax

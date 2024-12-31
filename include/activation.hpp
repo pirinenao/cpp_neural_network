@@ -6,6 +6,7 @@
 
 /*
  * ReLU activation for the hidden layer
+ * sets all negative inputs to 0
  */
 float relu(float x);
 
