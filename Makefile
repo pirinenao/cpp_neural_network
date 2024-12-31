@@ -2,7 +2,7 @@
 COMPILER = g++
 
 # Compiler flags
-FLAGS = -std=c++11 -Wall -Wextra -Iinclude -DMNIST_DATA_LOCATION=\"$(MNIST_DATA_DIR)\"
+FLAGS = -std=c++11 -Wall -Wextra -Iinclude -DMNIST_DATA_LOCATION=\"$(MNIST_DATA_DIR)\" -pthread
 
 # Target executable
 TARGET = ./main
