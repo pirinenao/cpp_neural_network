@@ -1,5 +1,7 @@
 #include "../include/training.hpp"
 
+#define LRELU_ALPHA 0.01
+
 /*
  * computes the weighted sums for the neurons in the layer
  */
@@ -18,8 +20,8 @@ void forward_feed(LAYER *layer,
             layer->weighted_sums[i] += (layer->weights[i][j] * images[sample_index][j]);
         }
 
-        // add bias and apply activation function (ReLU)
-        layer->outputs[i] = relu(layer->weighted_sums[i] + layer->biases[i]);
+        // add bias and apply activation function (leaky ReLU)
+        layer->outputs[i] = leaky_relu(layer->weighted_sums[i] + layer->biases[i], LRELU_ALPHA);
     }
 }
 

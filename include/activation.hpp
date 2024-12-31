@@ -6,8 +6,15 @@
 
 /*
  * ReLU activation for the hidden layer
+ * sets all negative inputs to 0
  */
 float relu(float x);
+
+/*
+ * leaky ReLU activation for the hidden layer
+ * sets all negative inputs to alpha * x
+ */
+float leaky_relu(float x, double alpha);
 
 /*
  * softmax activation for the output layers

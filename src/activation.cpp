@@ -6,6 +6,18 @@ float relu(float x)
     return fmax(0, x);
 }
 
+float leaky_relu(float x, double alpha)
+{
+    if (x > 0)
+    {
+        return x;
+    }
+    else
+    {
+        return alpha * x;
+    }
+}
+
 std::vector<float> softmax(LAYER *layer, int num_classes)
 {
     // initialize output vector
