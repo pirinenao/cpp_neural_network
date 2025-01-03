@@ -71,7 +71,6 @@ Even though the evaluation metrics are good, further optimizations could enhance
 - Experiment with the network architecture
 - Implement dynamic learning rate
 - Use GPU for the training (e.g. CUDA toolkit for NVIDIA)
-- Parallel computing with multiple CPU cores
 
 ### Setup Instructions
 
