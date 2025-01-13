@@ -4,7 +4,7 @@
  * trains the model using the training dataset
  */
 void model_train(mnist::MNIST_dataset<std::vector, std::vector<float>, int> dataset, LAYER &layer,
-                 LAYER &output_layer, EVALUATION eval, int num_epochs, int num_neurons, int num_classes, float learning_rate)
+                 LAYER &output_layer, EVALUATION eval, int num_epochs, int num_neurons, int num_classes, float learning_rate, int parallel)
 {
     std::cout << "----------------------------------------"
               << std::endl;
@@ -13,8 +13,18 @@ void model_train(mnist::MNIST_dataset<std::vector, std::vector<float>, int> data
               << std::endl;
     std::cout << "Number of samples: " << dataset.training_images.size() << std::endl;
     std::cout << "Number of epochs: " << num_epochs << std::endl;
-    std::cout << "Learning rate: " << learning_rate << std::endl
-              << std::endl;
+    std::cout << "Learning rate: " << learning_rate << std::endl;
+
+    if (parallel)
+    {
+        std::cout << "Parallel computing: enabled" << std::endl;
+    }
+    else
+    {
+        std::cout << "Parallel computing: disabled" << std::endl;
+    }
+
+    std::cout << std::endl;
 
     for (int epoch = 1; epoch <= num_epochs; epoch++)
     {
@@ -22,7 +32,15 @@ void model_train(mnist::MNIST_dataset<std::vector, std::vector<float>, int> data
         // iterate over the training set
         for (size_t sample_index = 0; sample_index < dataset.training_images.size(); sample_index++)
         {
-            forward_feed_parallel(&layer, dataset.training_images, sample_index, num_neurons);
+            if (parallel)
+            {
+                forward_feed_parallel(&layer, dataset.training_images, sample_index, num_neurons);
+            }
+            else
+            {
+                forward_feed(&layer, dataset.training_images, sample_index, num_neurons);
+            }
+
             feed_output(&output_layer, &layer, num_classes);
 
             // perform softmax
@@ -54,7 +72,7 @@ void model_train(mnist::MNIST_dataset<std::vector, std::vector<float>, int> data
  * evaluates model by using the validation dataset
  */
 void model_evaluate(mnist::MNIST_dataset<std::vector, std::vector<float>, int> dataset, LAYER &layer,
-                    LAYER &output_layer, EVALUATION eval, int num_neurons, int num_classes)
+                    LAYER &output_layer, EVALUATION eval, int num_neurons, int num_classes, int parallel)
 {
     std::cout << "----------------------------------------"
               << std::endl;
@@ -69,7 +87,15 @@ void model_evaluate(mnist::MNIST_dataset<std::vector, std::vector<float>, int> d
 
     for (size_t sample_index = 0; sample_index < dataset.test_images.size(); sample_index++)
     {
-        forward_feed_parallel(&layer, dataset.test_images, sample_index, num_neurons);
+        if (parallel)
+        {
+            forward_feed_parallel(&layer, dataset.test_images, sample_index, num_neurons);
+        }
+        else
+        {
+            forward_feed(&layer, dataset.test_images, sample_index, num_neurons);
+        }
+
         feed_output(&output_layer, &layer, num_classes);
 
         // perform softmax
