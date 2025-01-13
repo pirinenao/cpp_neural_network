@@ -106,6 +106,17 @@ make
 ./main
 ```
 
+### CLI flags
+
+**Available Options:**
+| Flag  | Argument        | Argument type             | Description                 | Default  |
+| :---: | :---:           | :---:                     | :---:                       | :---:    |
+| -e    | epochs          | positive integer value    | set custom number of epochs | 10       |
+| -l    | learning rate   | positive float value      | set custom learning rate    | 0.001    | 
+| -p    | no arguments    | no arguments              | enable parallel computing   | disabled |
+| -h    | no arguments    | no arguments              | print help                  | no value |
+
+
 ### License
 
 This project is licensed under the MIT License. See the [LICENSE](./LICENSE) file for the full text.
