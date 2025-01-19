@@ -1,6 +1,5 @@
 #include "../include/training.hpp"
 #include <thread>
-#include <functional> // for std::ref
 
 /*
  * computes the weighted sums for the neurons in the layer
